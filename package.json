@@ -1,0 +1,29 @@
+{
+  "name": "obuzaba",
+  "description": "A Discord bot that allows you to get notified when your favourite streamers go online.",
+  "version": "1.0.0",
+  "main": "build/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TenDRILLL/Obuzaba.git"
+  },
+  "keywords": [
+    "Twitch",
+    "Discord"
+  ],
+  "author": "Ten#0010 & hdgamer1404Jonas#7987",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TenDRILLL/Obuzaba/issues"
+  },
+  "homepage": "https://github.com/TenDRILLL/Obuzaba#readme",
+  "scripts": {
+    "build": "tsc --build",
+    "buildrun": "tsc --build && cd build && node ./index.js",
+    "builddeploy": "tsc --build && cd build && node ./deployCommands.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.2.0",
+    "dotenv": "^16.0.1"
+  }
+}
