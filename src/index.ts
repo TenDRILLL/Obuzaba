@@ -7,6 +7,7 @@ dotenv.config({path: "./.env"});
 const verify = verifyConfig();
 if(!verify.success){
     console.log(`Invalid configuration, ${verify.reason}`);
+    process.exit();
 } else {
     console.log(verify.reason);
 }
