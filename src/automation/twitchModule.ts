@@ -19,11 +19,12 @@ export function init() {
 //Don't yet know how pagination works, presuming after N amount of streamers it paginates them.
 
 export function getStreams(streamers: Array<string>){
-    client.getStreams({ channels: streamers }).then(reply => {
-        const streams: Array<TwitchStream> = reply.data;
-        console.log(streams);
-    }).catch(e => {
-        console.log(e);
+    return new Promise((res, rej)=>{
+        client.getStreams({ channels: streamers }).then(reply => {
+            res(reply.data as Array<TwitchStream>)
+        }).catch(e => {
+            rej(e);
+        });
     });
 }
 
