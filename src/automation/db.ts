@@ -35,9 +35,9 @@ async function init(){
  * @param guildID - The ID of the Discord Guild 
  */
  async function findOne(guildID: string) : Promise<dataType> {
-    let [result] = await con.query(`SELECT * FROM data WHERE guildID = ?`, [guildID])
-    const res = await result[0]
-    return res ? res.data : null
+    let [result] = await con.query(`SELECT * FROM data WHERE guildID = ?`, [guildID]);
+    const res = await result[0];
+    return res ? JSON.parse(res.data) : null;
 
 }
 
