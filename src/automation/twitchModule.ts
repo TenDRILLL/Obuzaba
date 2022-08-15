@@ -14,11 +14,11 @@ export function init() {
 
 //getStreams only returns those that are live, no object for offline ones.
 //If none of the provided streamers are live, returns: { data: [], pagination: {} }
-//"Up to 100 streams or users can be requested in a single request" -Api Docs
+//"Up to 100 streams or users can be requested in a single request" -Api
+//"Up to 800 requests per minute" -Api
 //Don't yet know how pagination works, presuming after N amount of streamers it paginates them.
 
-export function getStreams(streamers: string | Array<string>){
-    if(typeof streamers === "string") streamers = [streamers];
+export function getStreams(streamers: Array<string>){
     client.getStreams({ channels: streamers }).then(reply => {
         const streams: Array<TwitchStream> = reply.data;
         console.log(streams);
@@ -26,3 +26,4 @@ export function getStreams(streamers: string | Array<string>){
         console.log(e);
     });
 }
+
