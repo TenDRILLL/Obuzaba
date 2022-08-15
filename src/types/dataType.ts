@@ -1,5 +1,6 @@
 type dataType = {
-    streamers: Array<string>,
+    streamers: Array<string>;
+    guildId: string;
 }
 
 export { dataType }

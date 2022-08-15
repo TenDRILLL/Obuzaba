@@ -20,3 +20,8 @@ class ThumbnailUrlOptions {
     width?: number;
     height?: number;
 }
+
+export class StreamerObject {
+    name: string;
+    guilds: Array<string>;
+}
