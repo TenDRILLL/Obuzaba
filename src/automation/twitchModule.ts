@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config({path: "./.env"});
 import TwitchApi from "node-twitch";
+import {TwitchStream} from "../types/classes";
 
 let client;
 
@@ -16,11 +17,11 @@ export function init() {
 //"Up to 100 streams or users can be requested in a single request" -Api Docs
 //Don't yet know how pagination works, presuming after N amount of streamers it paginates them.
 
-
 export function getStreams(streamers: string | Array<string>){
     if(typeof streamers === "string") streamers = [streamers];
     client.getStreams({ channels: streamers }).then(reply => {
-        console.log(reply);
+        const streams: Array<TwitchStream> = reply.data;
+        console.log(streams);
     }).catch(e => {
         console.log(e);
     });
