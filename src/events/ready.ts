@@ -14,12 +14,17 @@ export class Ready extends Event{
 
     async exec(bot: Client){
         console.log(`Connection to Discord Gateway formed, using account ${bot.user?.tag}.`);
-        loadCommands();
-        init();
 
         await db.connect()
         await db.init()
         await api.start(db)
+
+        const guildData = await db.findOne("552872618345365504")
+        guildData.streamer = ["test", "test2", "test3", "test4"]
+        await db.updateData("552872618345365504", guildData)
+
+        loadCommands();
+        init(bot);
 
         await bot.guilds.cache.forEach(async guild => {
             const data = await db.findOne(guild.id)

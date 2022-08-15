@@ -2,8 +2,15 @@ import dotenv from 'dotenv';
 dotenv.config({path: "./.env"});
 import TwitchApi from "node-twitch";
 import {TwitchStream} from "../types/classes";
+import * as db from "../automation/db";
+import {dbType} from "../types/db";
+import discord from "discord.js";
+import { dataType } from '../types/dataType';
 
 let client;
+
+let streamers: string[] = [];
+
 let fakeDB = {
     streamers: [
         "Amouranth",
@@ -12,16 +19,32 @@ let fakeDB = {
     ]
 };
 
-export function init() {
-    client = new TwitchApi({
+export async function init(bot: discord.Client) {
+    /*client = new TwitchApi({
         client_id: process.env.twitchClientId as string,
         client_secret: process.env.twitchClientSecret as string
-    });
+    });*/
+
 
     setInterval(async ()=>{
-        const streams: Array<TwitchStream> = await getStreams(fakeDB.streamers);
+        await bot.guilds.cache.forEach(async (guild) => {
+            const guildData: dataType = await db.findOne(guild.id);
+            if (!guildData.streamer)
+                return;
+            guildData.streamer.forEach(async (streamer2) => {
+                if (!streamers.includes(streamer2)) {streamers.push(streamer2)}
+            })
+        })
+
+        if(streamers == undefined) {
+            console.log("No streamers found in database.");
+        } else {
+            console.log(streamers);
+        }
+
+        /*const streams: Array<TwitchStream> = await getStreams(fakeDB.streamers);
         if(streams.length === 0) return;
-        console.log(streams);
+        console.log(streams);*/
     },60*1000);
 }
 

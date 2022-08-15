@@ -1,5 +1,5 @@
 type dataType = {
-    testEntry: string;
+    streamer: string[], 
 }
 
 export { dataType }

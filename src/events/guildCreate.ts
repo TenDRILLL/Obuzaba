@@ -14,6 +14,7 @@ export class Ready extends Event{
     }
 
     async exec(bot: Client, guild: Guild){
+        console.log(`Joined guild ${guild.name}`);
         
         const data = await db.findOne(guild.id)
         if (data != null) {
