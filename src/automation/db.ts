@@ -1,3 +1,5 @@
+import dotenv from 'dotenv';
+dotenv.config({path: "./.env"});
 import * as db from "mysql2/promise"
 import { dataType } from "../types/dataType"
 
@@ -11,10 +13,10 @@ async function getDB(): Promise<db.Connection> {
 //connect to database
 async function connect(){
     con = await db.createConnection({
-        host: "127.0.0.1",
-        user: "root",
-        password: "fdfd54fd45fd54f54d04###f4ff4ff444g4f###",
-        database: "twitchbot"
+        host: process.env.databaseHost,
+        user: process.env.databaseUser,
+        password: process.env.databasePass,
+        database: process.env.databaseName
     })
     console.log(`Database connected!`)
 }
