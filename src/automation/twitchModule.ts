@@ -20,10 +20,10 @@ let fakeDB = {
 };
 
 export async function init(bot: discord.Client) {
-    /*client = new TwitchApi({
+    client = new TwitchApi({
         client_id: process.env.twitchClientId as string,
         client_secret: process.env.twitchClientSecret as string
-    });*/
+    });
 
 
     setInterval(async ()=>{
@@ -42,9 +42,9 @@ export async function init(bot: discord.Client) {
             console.log(streamers);
         }
 
-        /*const streams: Array<TwitchStream> = await getStreams(fakeDB.streamers);
+        const streams: Array<TwitchStream> = await getStreams(fakeDB.streamers);
         if(streams.length === 0) return;
-        console.log(streams);*/
+        console.log(streams);
     },60*1000);
 }
 
