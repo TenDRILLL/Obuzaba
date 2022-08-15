@@ -1,7 +1,7 @@
 import { dataType } from "../types/dataType";
 
 const defaultGuild: dataType = {
-    streamer: []
+    streamers: []
 }
 
 export default defaultGuild;

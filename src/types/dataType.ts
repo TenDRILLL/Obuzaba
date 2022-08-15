@@ -1,5 +1,5 @@
 type dataType = {
-    streamer: string[], 
+    streamers: Array<string>,
 }
 
 export { dataType }
