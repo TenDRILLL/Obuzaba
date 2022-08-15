@@ -1,7 +1,15 @@
 import {IntentsBitField, Client} from "discord.js";
 import {createEvents} from "./automation/eventModule";
 import dotenv from 'dotenv';
+import {verifyConfig} from "./automation/verifyConfig";
 dotenv.config({path: "./.env"});
+
+const verify = verifyConfig();
+if(!verify.success){
+    console.log(`Invalid configuration, ${verify.reason}`);
+} else {
+    console.log(verify.reason);
+}
 
 const bot = new Client({
     intents: [
