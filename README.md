@@ -3,6 +3,6 @@ A Discord bot that allows you to get notified when your favourite streamers go o
 
 The bot expects to find a .env file in the built code, containing:
 ```dotenv
-applicationId="your bot's application id"
-token="your bot's token"
+discordApplicationId="Your Discord Bot's Application ID"
+discordToken="Your Discord Bot's Token"
 ```

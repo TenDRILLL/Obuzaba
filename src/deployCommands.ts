@@ -6,8 +6,8 @@ import Command from "./classes/Command";
 import dotenv from 'dotenv';
 dotenv.config({path: "./.env"});
 
-const token = process.env.token;
-const applicationId = process.env.applicationId;
+const token = process.env.discordToken;
+const applicationId = process.env.discordApplicationId;
 const commands: ApplicationCommandData[] = [];
 
 readdirSync("./commands").forEach(f => {

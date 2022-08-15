@@ -11,7 +11,7 @@ const bot = new Client({
 });
 
 console.log("Accessing Discord Gateway...");
-bot.login(process.env.token).catch(error => {
+bot.login(process.env.discordToken).catch(error => {
     console.log("Discord Gateway connection failed, terminating...");
     console.error(error);
     process.exit();
