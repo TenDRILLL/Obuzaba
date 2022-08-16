@@ -1,3 +1,5 @@
+// noinspection ES6MissingAwait
+
 import dotenv from 'dotenv';
 dotenv.config({path: "./.env"});
 import TwitchApi from "node-twitch";
@@ -20,43 +22,41 @@ export async function init(bot: discord.Client) {
     setInterval(async ()=>{
         const promises: Array<Promise<dataType | null>> = [];
 
-        bot.guilds.cache.forEach(guild => {
-            promises.push(new Promise(res => {
-                db.findOne(guild.id).then(data => res(data));
-            }));
-        });
-
-        Promise.all(promises).then(guildDataArray => {
-            guildDataArray.forEach(data => {
-                if(data && data.streamers){
-                    data.streamers.forEach(streamer => {
-                        const existingStreamer = streamers.filter(x => x.name === streamer.toLowerCase())[0];
-                        if(existingStreamer && !(existingStreamer.guilds.includes(data.guildId))){
-                            existingStreamer.guilds.push(data.guildId);
-                        } else {
-                            streamers.push({
-                                name: streamer.toLowerCase(),
-                                guilds: [data.guildId],
-                                notified: false
-                            });
-                        }
-                    });
-                }
-            });
-            getStreams(streamers.map(x => x.name)).then(streams => {
-                if(streams.length === 0) return;
-                const liveStreamerNames = streams.map(x => x.user_login);
-                streamers = streamers.filter(x => liveStreamerNames.includes(x.name));
-                streams.forEach(stream => {
-                    const streamerObject = streamers.filter(x => x.name === stream.user_login)[0];
-                    if(!streamerObject.notified){
-                        streamerObject.notified = true;
-                        console.log(`Notify guilds ${streamerObject.guilds.join(", ")} that ${stream.user_name} is live and playing ${stream.game_name}`);
+        bot.guilds.cache.forEach(async guild => {
+            let data = await db.findOne(guild.id);
+            if(data && data.streamers){
+                data.streamers.forEach(streamer => {
+                    const existingStreamer = streamers.filter(x => x.name === streamer.toLowerCase())[0];
+                    if(existingStreamer && !(existingStreamer.guilds.includes(guild.id))){
+                        existingStreamer.guilds.push(guild.id);
+                    } else {
+                        streamers.push({
+                            name: streamer.toLowerCase(),
+                            guilds: [guild.id],
+                            notified: false
+                        });
                     }
                 });
-            });
+                getStreams(streamers.map(x => x.name)).then(streams => {
+                    console.log(`
+getStreams: ${streamers.map(x => x.name).join(", ")}`);
+                    console.log(`streams: ${streams.map(x => x.user_login).join(", ")}`);
+                    if(streams.length === 0) return;
+                    const liveStreamerNames = streams.map(x => x.user_login);
+                    streamers = streamers.filter(x => liveStreamerNames.includes(x.name));
+                    console.log(`removeNotLive: ${streamers.map(x => x.name).join(", ")}`);
+                    streams.forEach(stream => {
+                        const streamerObject = streamers.filter(x => x.name === stream.user_login)[0];
+                        if(!(streamerObject)) return;
+                        if(!streamerObject.notified){
+                            streamerObject.notified = true;
+                            console.log(`Notify guilds ${streamerObject.guilds.join(", ")} that ${stream.user_name} is live and playing ${stream.game_name}`);
+                        }
+                    });
+                });
+            }
         });
-    },2*1000);
+    },10*1000);
 }
 
 //getStreams only returns those that are live, no object for offline ones.
