@@ -7,6 +7,7 @@ import discord from "discord.js";
 import { dataType } from '../types/dataType';
 
 let client;
+let streamers: Array<StreamerObject> = [];
 
 export async function init(bot: discord.Client) {
     console.log("Twitch API init.");
@@ -17,7 +18,6 @@ export async function init(bot: discord.Client) {
 
 
     setInterval(async ()=>{
-        const streamers: Array<StreamerObject> = [];
         const promises: Array<Promise<dataType | null>> = [];
 
         bot.guilds.cache.forEach(guild => {
@@ -31,12 +31,13 @@ export async function init(bot: discord.Client) {
                 if(data && data.streamers){
                     data.streamers.forEach(streamer => {
                         const existingStreamer = streamers.filter(x => x.name === streamer.toLowerCase())[0];
-                        if(existingStreamer){
+                        if(existingStreamer && !(existingStreamer.guilds.includes(data.guildId))){
                             existingStreamer.guilds.push(data.guildId);
                         } else {
                             streamers.push({
                                 name: streamer.toLowerCase(),
-                                guilds: [data.guildId]
+                                guilds: [data.guildId],
+                                notified: false
                             });
                         }
                     });
@@ -44,14 +45,18 @@ export async function init(bot: discord.Client) {
             });
             getStreams(streamers.map(x => x.name)).then(streams => {
                 if(streams.length === 0) return;
+                const liveStreamerNames = streams.map(x => x.user_login);
+                streamers = streamers.filter(x => liveStreamerNames.includes(x.name));
                 streams.forEach(stream => {
                     const streamerObject = streamers.filter(x => x.name === stream.user_login)[0];
-                    console.log(`Notify guilds ${streamerObject.guilds.join(", ")} that ${stream.user_name} is live and playing ${stream.game_name}`);
+                    if(!streamerObject.notified){
+                        streamerObject.notified = true;
+                        console.log(`Notify guilds ${streamerObject.guilds.join(", ")} that ${stream.user_name} is live and playing ${stream.game_name}`);
+                    }
                 });
             });
-
         });
-    },60*1000);
+    },2*1000);
 }
 
 //getStreams only returns those that are live, no object for offline ones.

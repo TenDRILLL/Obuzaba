@@ -24,4 +24,5 @@ class ThumbnailUrlOptions {
 export class StreamerObject {
     name: string;
     guilds: Array<string>;
+    notified: boolean;
 }
