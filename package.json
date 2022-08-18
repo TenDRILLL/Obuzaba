@@ -11,7 +11,7 @@
     "Twitch",
     "Discord"
   ],
-  "author": "Ten#0010 & hdgamer1404Jonas#7987",
+  "author": "Ten#0010",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/TenDRILLL/Obuzaba/issues"
@@ -25,7 +25,7 @@
   "dependencies": {
     "discord.js": "^14.2.0",
     "dotenv": "^16.0.1",
-    "mysql2": "^2.3.3",
+    "mysql": "^2.18.1",
     "node-twitch": "^0.4.5"
   }
 }
